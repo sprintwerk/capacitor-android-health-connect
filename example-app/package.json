@@ -13,12 +13,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
+    "@capacitor/android": "7.0.0",
     "@capacitor/camera": "latest",
+    "@capacitor/core": "latest",
     "@capacitor/splash-screen": "latest",
-    "@sprintwerk/capacitor-android-health-connect": "file:..",
-    "@capacitor/ios": "7.0.0",
-    "@capacitor/android": "7.0.0"
+    "@sprintwerk/capacitor-android-health-connect": "file:.."
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
