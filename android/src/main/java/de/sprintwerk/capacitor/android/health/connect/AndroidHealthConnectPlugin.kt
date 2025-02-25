@@ -1,0 +1,85 @@
+package de.sprintwerk.capacitor.android.health.connect
+
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import com.getcapacitor.JSObject
+import com.getcapacitor.PluginCall
+import com.getcapacitor.annotation.CapacitorPlugin
+import com.getcapacitor.PluginMethod
+import com.getcapacitor.Plugin
+import androidx.health.connect.client.PermissionController
+
+@CapacitorPlugin(name = "AndroidHealthConnect")
+class AndroidHealthConnectPlugin : Plugin() {
+
+    private val implementation = AndroidHealthConnect()
+    private var permissionCall: PluginCall? = null
+    private var requestedPermissions: Set<String> = emptySet()
+    private var invalidRecords: Set<String> = emptySet()
+    private lateinit var permissionLauncher: ActivityResultLauncher<Set<String>>
+
+    override fun load() {
+        super.load()
+        // Ensure the activity is a ComponentActivity so we can register for activity results.
+        val componentActivity = activity as? ComponentActivity
+        if (componentActivity == null) {
+            Log.e("AndroidHealthConnect", "Activity is not a ComponentActivity. Permission launcher cannot be registered.")
+            return
+        }
+        permissionLauncher = componentActivity.registerForActivityResult(
+            PermissionController.createRequestPermissionResultContract()
+        ) { granted: Set<String> ->
+            // Map each requested permission to whether it was granted.
+            val resultMap = requestedPermissions.associateWith { it in granted }
+            val allGranted = resultMap.values.all { it }
+            val result = JSObject().apply {
+                put("granted", allGranted)
+                put("permissions", resultMap)
+                put("invalidRecords", invalidRecords.toList())
+            }
+            permissionCall?.resolve(result)
+            permissionCall = null
+            requestedPermissions = emptySet()
+            invalidRecords = emptySet()
+        }
+    }
+
+    @PluginMethod
+    fun echo(call: PluginCall) {
+        val value = call.getString("value")
+        val ret = JSObject().apply { put("value", implementation.echo(value)) }
+        call.resolve(ret)
+    }
+
+    @PluginMethod
+    fun checkAvailability(call: PluginCall) {
+        try {
+            val availability = implementation.checkAvailability(context)
+            call.resolve(availability)
+        } catch (e: RuntimeException) {
+            call.reject(e.message)
+        }
+    }
+
+    /**
+     * Requests permissions by accepting two arrays: "read" and "write".
+     * Returns a result that includes both the permission statuses and any invalid record types.
+     */
+    @PluginMethod
+    override fun requestPermissions(call: PluginCall) {
+        val readPermissionsArray = call.getArray("read")
+        val writePermissionsArray = call.getArray("write")
+        val result = implementation.buildPermissionSet(readPermissionsArray, writePermissionsArray)
+        // Store both valid permissions and invalid records.
+        requestedPermissions = result.validPermissions
+        invalidRecords = result.invalidRecords
+
+        if (requestedPermissions.isEmpty()) {
+            call.reject("No valid permissions specified. Invalid records: ${invalidRecords.joinToString()}")
+            return
+        }
+        permissionCall = call
+        permissionLauncher.launch(requestedPermissions)
+    }
+}

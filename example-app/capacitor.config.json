@@ -1,10 +1,10 @@
 {
-  "appId": "com.example.plugin",
+  "appId": "de.sprintwerk.capacitorandroidhealth.exampleapp",
   "appName": "example-app",
   "webDir": "dist",
   "plugins": {
     "SplashScreen": {
-      "launchAutoHide": false
+      "launchAutoHide": true
     }
   }
 }
