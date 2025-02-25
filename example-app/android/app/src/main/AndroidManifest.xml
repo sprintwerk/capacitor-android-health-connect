@@ -48,6 +48,10 @@
         </provider>
     </application>
 
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />

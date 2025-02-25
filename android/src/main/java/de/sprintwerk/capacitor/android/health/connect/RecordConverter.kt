@@ -5,6 +5,7 @@ import com.getcapacitor.JSArray
 import androidx.health.connect.client.records.Record
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
+import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.records.ExerciseSegment
 import androidx.health.connect.client.records.ExerciseLap
 import androidx.health.connect.client.records.ExerciseRoute
@@ -18,15 +19,6 @@ import androidx.health.connect.client.records.metadata.Device
  */
 fun convertRecordToJson(record: Record): Any {
     return when (record) {
-        is WeightRecord -> {
-            val obj = JSObject()
-            obj.put("time", record.time.toString())
-            obj.put("zoneOffset", record.zoneOffset?.toString() ?: "")
-            obj.put("value", record.weight.inKilograms)
-            obj.put("unit", "kg")
-            obj.put("metadata", convertMetadataToJson(record.metadata))
-            obj
-        }
         is ExerciseSessionRecord -> {
             val obj = JSObject()
             obj.put("startTime", record.startTime.toString())
@@ -50,6 +42,25 @@ fun convertRecordToJson(record: Record): Any {
             }
             obj.put("laps", lapsArray)
             obj.put("plannedExerciseSessionId", record.plannedExerciseSessionId ?: "")
+            obj
+        }
+        is StepsRecord -> {
+            val obj = JSObject()
+            obj.put("startTime", record.startTime.toString())
+            obj.put("startZoneOffset", record.startZoneOffset?.toString() ?: "")
+            obj.put("endTime", record.endTime.toString())
+            obj.put("endZoneOffset", record.endZoneOffset?.toString() ?: "")
+            obj.put("count", record.count)
+            obj.put("metadata", convertMetadataToJson(record.metadata))
+            obj
+        }
+        is WeightRecord -> {
+            val obj = JSObject()
+            obj.put("time", record.time.toString())
+            obj.put("zoneOffset", record.zoneOffset?.toString() ?: "")
+            obj.put("value", record.weight.inKilograms)
+            obj.put("unit", "kg")
+            obj.put("metadata", convertMetadataToJson(record.metadata))
             obj
         }
         // Add additional custom conversions for other record types here if needed.

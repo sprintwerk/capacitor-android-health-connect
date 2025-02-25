@@ -9,6 +9,26 @@ npm install @sprintwerk/capacitor-android-health-connect
 npx cap sync
 ```
 
+Add the following to your app's `AndroidManifest.xml`:
+
+```xml
+<queries>
+   <package android:name="com.google.android.apps.healthdata" />
+</queries>
+```
+
+### Permissions
+
+You also need to add permissions for the records you want to read and/or write to the AndroidManifest.xml. A complete list of available records and the corresponding permissions can be found [here](https://developer.android.com/health-and-fitness/guides/health-connect/plan/data-types#permissions).
+
+```xml
+<!-- Example permissions -->
+<uses-permission android:name="android.permission.health.READ_STEPS"/>
+<uses-permission android:name="android.permission.health.WRITE_STEPS"/>
+<uses-permission android:name="android.permission.health.READ_EXERCISE"/>
+<uses-permission android:name="android.permission.health.WRITE_EXERCISE"/>
+```
+
 ## API
 
 <docgen-index>
