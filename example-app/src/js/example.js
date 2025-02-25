@@ -40,9 +40,13 @@ window.testGetActivities = () => {
     });
 }
 
-window.testGetSteps = () => {
-    AndroidHealthConnect.readRecords({ start: '2025-02-25T00:01:00Z', end: '2025-02-25T22:01:00Z', type: 'Steps' }).then((result) => {
+window.testGetSteps = (pageToken) => {
+    AndroidHealthConnect.readRecords({ start: '2025-02-25T00:01:00Z', end: '2025-02-25T22:01:00Z', type: 'Steps', pageToken: pageToken, pageSize: 3 }).then((result) => {
         console.log('Steps', result);
+
+        if (result.nextPageToken) {
+            testGetSteps(result.nextPageToken);
+        }
     }).catch((error) => {
         console.error('Error', error);
     });

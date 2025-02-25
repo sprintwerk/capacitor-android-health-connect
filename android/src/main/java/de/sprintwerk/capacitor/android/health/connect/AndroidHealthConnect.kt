@@ -101,7 +101,7 @@ class AndroidHealthConnect {
      * @param end an ISO-8601 string representing the end time.
      * @return a JSObject containing the list of records under the "records" key.
      */
-    suspend fun readRecords(context: Context, type: String, start: String, end: String): JSObject {
+    suspend fun readRecords(context: Context, type: String, start: String, end: String, pageSize: Int?, pageToken: String? = null): JSObject {
         val startInstant = Instant.parse(start)
         val endInstant = Instant.parse(end)
         // Look up the record class from the map. We expect RECORDS_TYPE_NAME_MAP to map 'type' to a Class<out Record>.
@@ -111,7 +111,9 @@ class AndroidHealthConnect {
         // Build a read records request.
         val request = ReadRecordsRequest(
             recordType = recordType,
-            timeRangeFilter = TimeRangeFilter.between(startInstant, endInstant)
+            timeRangeFilter = TimeRangeFilter.between(startInstant, endInstant),
+            pageSize = pageSize ?: 1000,
+            pageToken = pageToken
         )
         // Execute the query.
         val response = client.readRecords(request)
@@ -123,6 +125,7 @@ class AndroidHealthConnect {
         }
         val result = JSObject()
         result.put("records", recordsArray)
+        result.put("nextPageToken", response.pageToken)
         return result
     }
 }

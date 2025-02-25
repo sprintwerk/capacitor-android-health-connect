@@ -96,15 +96,6 @@ class AndroidHealthConnectPlugin : Plugin() {
                 }
             }
         }
-
-        // val client = HealthConnectClient.getOrCreate(context)
-        // client.permissionController.revokeAllPermissions()
-        // call.resolve()
-
-        // this.activity.lifecycleScope.launch {
-        //     healthConnectClient.permissionController.revokeAllPermissions()
-        //     call.resolve()
-        // }
     }
 
     /**
@@ -116,6 +107,8 @@ class AndroidHealthConnectPlugin : Plugin() {
         val type = call.getString("type")
         val start = call.getString("start")
         val end = call.getString("end")
+        val pageToken = call.getString("pageToken")
+        val pageSize = call.getInt("pageSize")
         if (type == null || start == null || end == null) {
             call.reject("Missing parameters: 'type', 'start', and 'end' are required")
             return
@@ -123,7 +116,7 @@ class AndroidHealthConnectPlugin : Plugin() {
         // Launch a coroutine to run the suspend function.
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val result = implementation.readRecords(context, type, start, end)
+                val result = implementation.readRecords(context, type, start, end, pageSize, pageToken)
                 withContext(Dispatchers.Main) {
                     call.resolve(result)
                 }
