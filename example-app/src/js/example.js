@@ -21,3 +21,11 @@ window.testGetWeight = () => {
         console.error('Error', error);
     });
 }
+
+window.testGetActivities = () => {
+    AndroidHealthConnect.readRecords({ start: '2025-02-25T00:01:00Z', end: '2025-02-25T22:01:00Z', type: 'ActivitySession' }).then((result) => {
+        console.log('Activities', result);
+    }).catch((error) => {
+        console.error('Error', error);
+    });
+}
