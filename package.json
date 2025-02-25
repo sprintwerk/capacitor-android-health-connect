@@ -9,9 +9,7 @@
   "files": [
     "android/src/main/",
     "android/build.gradle",
-    "dist/",
-    "Package.swift",
-    "SprintwerkCapacitorAndroidHealthConnect.podspec"
+    "dist/"
   ],
   "author": "Manuel Heidrich",
   "license": "MIT",
