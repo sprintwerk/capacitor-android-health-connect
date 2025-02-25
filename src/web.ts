@@ -18,4 +18,8 @@ export class AndroidHealthConnectWeb extends WebPlugin implements AndroidHealthC
   async requestPermissions(options: { read: string[]; write: string[] }): Promise<void> {
     console.warn('HealthConnect is not available on the web', options);
   }
+
+  async readRecords(options: { startTime: string; endTime: string; record: string }): Promise<any> {
+    console.warn('HealthConnect is not available on the web', options);
+  }
 }

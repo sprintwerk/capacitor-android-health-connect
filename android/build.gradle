@@ -38,6 +38,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
     lintOptions {
         abortOnError false
     }
@@ -60,4 +63,5 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation "androidx.health.connect:connect-client:1.1.0-alpha11"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1"
 }

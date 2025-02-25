@@ -9,6 +9,10 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.Plugin
 import androidx.health.connect.client.PermissionController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @CapacitorPlugin(name = "AndroidHealthConnect")
 class AndroidHealthConnectPlugin : Plugin() {
@@ -81,5 +85,33 @@ class AndroidHealthConnectPlugin : Plugin() {
         }
         permissionCall = call
         permissionLauncher.launch(requestedPermissions)
+    }
+
+    /**
+     * Reads records of the given type between start and end times.
+     * Expects parameters: "type" (String), "start" (ISO 8601 String), and "end" (ISO 8601 String).
+     */
+    @PluginMethod
+    fun readRecords(call: PluginCall) {
+        val type = call.getString("type")
+        val start = call.getString("start")
+        val end = call.getString("end")
+        if (type == null || start == null || end == null) {
+            call.reject("Missing parameters: 'type', 'start', and 'end' are required")
+            return
+        }
+        // Launch a coroutine to run the suspend function.
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = implementation.readRecords(context, type, start, end)
+                withContext(Dispatchers.Main) {
+                    call.resolve(result)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    call.reject(e.message)
+                }
+            }
+        }
     }
 }
