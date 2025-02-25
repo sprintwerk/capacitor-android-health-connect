@@ -59,7 +59,9 @@ You also need to add permissions for the records you want to read and/or write t
 
 * [`checkAvailability()`](#checkavailability)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`revokePermissions()`](#revokepermissions)
 * [`readRecords(...)`](#readrecords)
+* [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
 </docgen-index>
@@ -91,19 +93,39 @@ requestPermissions(options: { read: RecordType[]; write: RecordType[]; }) => Pro
 --------------------
 
 
+### revokePermissions()
+
+```typescript
+revokePermissions() => Promise<void>
+```
+
+--------------------
+
+
 ### readRecords(...)
 
 ```typescript
-readRecords(options: { start: string; end: string; type: RecordType; }) => Promise<any>
+readRecords(options: { start: string; end: string; type: RecordType; pageSize?: number; pageToken?: string; }) => Promise<ReadRecordsResponse>
 ```
 
-| Param         | Type                                                                                     |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ start: string; end: string; type: <a href="#recordtype">RecordType</a>; }</code> |
+| Param         | Type                                                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ start: string; end: string; type: <a href="#recordtype">RecordType</a>; pageSize?: number; pageToken?: string; }</code> |
 
-**Returns:** <code>Promise&lt;any&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#readrecordsresponse">ReadRecordsResponse</a>&gt;</code>
 
 --------------------
+
+
+### Interfaces
+
+
+#### ReadRecordsResponse
+
+| Prop                | Type                |
+| ------------------- | ------------------- |
+| **`records`**       | <code>any[]</code>  |
+| **`nextPageToken`** | <code>string</code> |
 
 
 ### Type Aliases
