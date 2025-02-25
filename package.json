@@ -1,6 +1,6 @@
 {
   "name": "@sprintwerk/capacitor-android-health-connect",
-  "version": "0.0.1",
+  "version": "1.0.0-0",
   "description": "Capacitor plugin to interact with Android Health Connect",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
