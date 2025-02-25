@@ -17,6 +17,30 @@ Add the following to your app's `AndroidManifest.xml`:
 </queries>
 ```
 
+Also add this to your `AndroidManifest.xml`:
+
+```xml
+<application>
+...
+    <activity>
+    ...
+
+        <!-- Permission handling for Android 13 and before -->
+        <intent-filter>
+            <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+        </intent-filter>
+
+        <!-- Permission handling for Android 14 and later -->
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW_PERMISSION_USAGE"/>
+            <category android:name="android.intent.category.HEALTH_PERMISSIONS"/>
+        </intent-filter>
+
+    ...
+    </activity>
+</application>
+```
+
 ### Permissions
 
 You also need to add permissions for the records you want to read and/or write to the AndroidManifest.xml. A complete list of available records and the corresponding permissions can be found [here](https://developer.android.com/health-and-fitness/guides/health-connect/plan/data-types#permissions).
@@ -33,26 +57,66 @@ You also need to add permissions for the records you want to read and/or write t
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`checkAvailability()`](#checkavailability)
+* [`requestPermissions(...)`](#requestpermissions)
+* [`readRecords(...)`](#readrecords)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### checkAvailability()
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+checkAvailability() => Promise<{ availability: HealthConnectAvailability; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ availability: <a href="#healthconnectavailability">HealthConnectAvailability</a>; }&gt;</code>
 
 --------------------
+
+
+### requestPermissions(...)
+
+```typescript
+requestPermissions(options: { read: RecordType[]; write: RecordType[]; }) => Promise<void>
+```
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code>{ read: RecordType[]; write: RecordType[]; }</code> |
+
+--------------------
+
+
+### readRecords(...)
+
+```typescript
+readRecords(options: { start: string; end: string; type: RecordType; }) => Promise<any>
+```
+
+| Param         | Type                                                                                     |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ start: string; end: string; type: <a href="#recordtype">RecordType</a>; }</code> |
+
+**Returns:** <code>Promise&lt;any&gt;</code>
+
+--------------------
+
+
+### Type Aliases
+
+
+#### HealthConnectAvailability
+
+<code>'Available' | 'NotSupported' | 'NotInstalled'</code>
+
+
+#### RecordType
+
+<code>'Steps' | 'Weight' | 'ActivitySession'</code>
 
 </docgen-api>
 

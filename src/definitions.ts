@@ -1,11 +1,13 @@
 export interface AndroidHealthConnectPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
-
   checkAvailability(): Promise<{ availability: HealthConnectAvailability }>;
 
-  requestPermissions(options: { read: string[]; write: string[] }): Promise<void>;
+  requestPermissions(options: { read: RecordType[]; write: RecordType[] }): Promise<void>;
 
-  readRecords(options: { startTime: string; endTime: string; record: string }): Promise<any>;
+  revokePermissions(): Promise<void>;
+
+  readRecords(options: { start: string; end: string; type: RecordType }): Promise<any>;
 }
 
 export type HealthConnectAvailability = 'Available' | 'NotSupported' | 'NotInstalled';
+
+export type RecordType = 'Steps' | 'Weight' | 'ActivitySession';

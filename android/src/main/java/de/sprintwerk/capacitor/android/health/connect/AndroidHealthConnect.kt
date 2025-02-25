@@ -23,11 +23,6 @@ data class PermissionSetResult(
 
 class AndroidHealthConnect {
 
-    fun echo(value: String?): String? {
-        Log.i("AndroidHealthConnect", value ?: "null")
-        return value
-    }
-
     /**
      * Builds a set of permission strings from two JSON arrays ("read" and "write").
      * Instead of throwing an exception for an unexpected record, it collects the record in an invalidRecords set.

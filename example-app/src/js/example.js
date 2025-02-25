@@ -1,22 +1,24 @@
 import { AndroidHealthConnect } from '@sprintwerk/capacitor-android-health-connect';
 
-window.testEcho = () => {
-    const inputValue = document.getElementById("echoInput").value;
-    AndroidHealthConnect.echo({ value: inputValue })
-    try {
-        
-        console.log('FOO');
-        AndroidHealthConnect.requestPermissions({ read: ['Steps', 'Exercise', 'ActivitySession', 'Weight'], write: ['Steps'] });
-        console.log('BAR');
-    } catch (error) {
+window.requestPermissions = () => {
+    AndroidHealthConnect.requestPermissions({ read: ['Steps', 'Exercise', 'ActivitySession', 'Weight'], write: ['Steps'] }).then((result) => {
+        console.log('Permissions', result);
+    }).catch((error) => {
         console.error('Error', error);
-        
-    }
+    });
 }
 
 window.checkAvailability = () => {
     AndroidHealthConnect.checkAvailability().then((result) => {
         console.log('Availability', result);
+    }).catch((error) => {
+        console.error('Error', error);
+    });
+}
+
+window.testRevokePermissions = () => {
+    AndroidHealthConnect.revokePermissions().then((result) => {
+        console.log('Revoke Permissions', result);
     }).catch((error) => {
         console.error('Error', error);
     });

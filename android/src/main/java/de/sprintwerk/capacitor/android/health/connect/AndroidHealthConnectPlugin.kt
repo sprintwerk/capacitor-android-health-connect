@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.health.connect.client.HealthConnectClient
 
 @CapacitorPlugin(name = "AndroidHealthConnect")
 class AndroidHealthConnectPlugin : Plugin() {
@@ -50,13 +51,6 @@ class AndroidHealthConnectPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun echo(call: PluginCall) {
-        val value = call.getString("value")
-        val ret = JSObject().apply { put("value", implementation.echo(value)) }
-        call.resolve(ret)
-    }
-
-    @PluginMethod
     fun checkAvailability(call: PluginCall) {
         try {
             val availability = implementation.checkAvailability(context)
@@ -85,6 +79,32 @@ class AndroidHealthConnectPlugin : Plugin() {
         }
         permissionCall = call
         permissionLauncher.launch(requestedPermissions)
+    }
+
+    @PluginMethod
+    fun revokePermissions(call: PluginCall) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val client = HealthConnectClient.getOrCreate(context)
+                client.permissionController.revokeAllPermissions()
+                withContext(Dispatchers.Main) {
+                    call.resolve()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    call.reject(e.message)
+                }
+            }
+        }
+
+        // val client = HealthConnectClient.getOrCreate(context)
+        // client.permissionController.revokeAllPermissions()
+        // call.resolve()
+
+        // this.activity.lifecycleScope.launch {
+        //     healthConnectClient.permissionController.revokeAllPermissions()
+        //     call.resolve()
+        // }
     }
 
     /**
