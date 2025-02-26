@@ -1,7 +1,7 @@
 import { AndroidHealthConnect } from '@sprintwerk/capacitor-android-health-connect';
 
 window.requestPermissions = () => {
-    AndroidHealthConnect.requestPermissions({ read: ['Steps', 'Exercise', 'ActivitySession', 'Weight'], write: ['Steps'] }).then((result) => {
+    AndroidHealthConnect.requestPermissions({ read: ['Steps', 'ActivitySession', 'Weight'], write: ['Steps', 'Weight'] }).then((result) => {
         console.log('Permissions', result);
     }).catch((error) => {
         console.error('Error', error);
@@ -11,6 +11,14 @@ window.requestPermissions = () => {
 window.checkAvailability = () => {
     AndroidHealthConnect.checkAvailability().then((result) => {
         console.log('Availability', result);
+    }).catch((error) => {
+        console.error('Error', error);
+    });
+}
+
+window.testGetPermissions = () => {
+    AndroidHealthConnect.getGrantedPermissions().then((result) => {
+        console.log('Permissions', result);
     }).catch((error) => {
         console.error('Error', error);
     });

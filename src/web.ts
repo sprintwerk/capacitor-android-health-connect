@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { AndroidHealthConnectPlugin, RecordType } from './definitions';
+import type { AndroidHealthConnectPlugin, PermissionsResponse, RecordType } from './definitions';
 
 export class AndroidHealthConnectWeb extends WebPlugin implements AndroidHealthConnectPlugin {
   async checkAvailability(): Promise<{ availability: 'Available' | 'NotSupported' | 'NotInstalled' }> {
@@ -9,8 +9,16 @@ export class AndroidHealthConnectWeb extends WebPlugin implements AndroidHealthC
     return { availability: 'NotSupported' };
   }
 
-  async requestPermissions(options: { read: RecordType[]; write: RecordType[] }): Promise<void> {
+  async requestPermissions(options: { read: RecordType[]; write: RecordType[] }): Promise<PermissionsResponse> {
     console.warn('HealthConnect is not available on the web', options);
+
+    return { read: [], write: [] };
+  }
+
+  async getGrantedPermissions(): Promise<PermissionsResponse> {
+    console.warn('HealthConnect is not available on the web');
+
+    return { read: [], write: [] };
   }
 
   async revokePermissions(): Promise<void> {

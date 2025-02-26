@@ -14,6 +14,7 @@ import java.time.Instant
 import kotlin.reflect.KClass
 import org.json.JSONArray
 import org.json.JSONObject
+import com.getcapacitor.JSArray
 
 // Data class to hold valid permissions and any invalid record strings.
 data class PermissionSetResult(
@@ -76,6 +77,71 @@ class AndroidHealthConnect {
         ret.put("permissions", result)
         ret.put("invalidRecords", invalidRecords.toList())
         return ret
+    }
+
+    /**
+     * Retrieves the set of permissions that have been granted by the user.
+     */
+    suspend fun getGrantedPermissions(context: Context): JSObject {
+        val client = HealthConnectClient.getOrCreate(context)
+        // Assuming your API returns a set of granted permission strings.
+        val granted: Set<String> = client.permissionController.getGrantedPermissions()
+        
+        // Create lists for read and write permission record names.
+        val readList = mutableListOf<String>()
+        val writeList = mutableListOf<String>()
+
+        val readArray = JSArray()
+        val writeArray = JSArray()
+        
+        for (perm in granted) {
+            // Use reversePermission to convert the raw permission string.
+            val mapping = reversePermission(perm)
+            if (mapping != null) {
+                val op = mapping.getString("operation") ?: continue
+                val record = mapping.getString("record") ?: continue
+                if (op.equals("read", ignoreCase = true)) {
+                    // readList.add(record)
+                    readArray.put(record)
+                } else if (op.equals("write", ignoreCase = true)) {
+                    // writeList.add(record)
+                    writeArray.put(record)
+                }
+            }
+        }
+        
+        val result = JSObject()
+        result.put("read", readArray)
+        result.put("write", writeArray)
+        return result
+    }
+
+    /**
+    * Given a permission string (e.g. "android.permission.health.READ_EXERCISE"),
+    * this function reverses the mapping using RECORDS_TYPE_NAME_MAP and HealthPermission.
+    * It returns a JSObject with:
+    *  - "operation": either "read" or "write"
+    *  - "record": the record name (for example, "ActivitySession")
+    * Returns null if no match is found.
+    */
+    fun reversePermission(permission: String): JSObject? {
+        // Iterate through each entry in RECORDS_TYPE_NAME_MAP.
+        for ((recordName, recordType) in RECORDS_TYPE_NAME_MAP) {
+            val expectedRead = HealthPermission.getReadPermission(recordType = recordType)
+            val expectedWrite = HealthPermission.getWritePermission(recordType = recordType)
+            if (expectedRead == permission) {
+                val result = JSObject()
+                result.put("operation", "read")
+                result.put("record", recordName)
+                return result
+            } else if (expectedWrite == permission) {
+                val result = JSObject()
+                result.put("operation", "write")
+                result.put("record", recordName)
+                return result
+            }
+        }
+        return null
     }
 
     /**

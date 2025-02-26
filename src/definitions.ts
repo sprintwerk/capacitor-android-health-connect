@@ -1,7 +1,9 @@
 export interface AndroidHealthConnectPlugin {
   checkAvailability(): Promise<{ availability: HealthConnectAvailability }>;
 
-  requestPermissions(options: { read: RecordType[]; write: RecordType[] }): Promise<void>;
+  requestPermissions(options: { read: RecordType[]; write: RecordType[] }): Promise<PermissionsResponse>;
+
+  getGrantedPermissions(): Promise<PermissionsResponse>;
 
   revokePermissions(): Promise<void>;
 
@@ -21,4 +23,9 @@ export type RecordType = 'Steps' | 'Weight' | 'ActivitySession';
 export interface ReadRecordsResponse {
   records: any[];
   nextPageToken?: string;
+}
+
+export interface PermissionsResponse {
+  read: RecordType[];
+  write: RecordType[];
 }

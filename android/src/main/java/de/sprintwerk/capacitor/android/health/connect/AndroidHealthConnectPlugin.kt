@@ -35,15 +35,12 @@ class AndroidHealthConnectPlugin : Plugin() {
         permissionLauncher = componentActivity.registerForActivityResult(
             PermissionController.createRequestPermissionResultContract()
         ) { granted: Set<String> ->
-            // Map each requested permission to whether it was granted.
             val resultMap = requestedPermissions.associateWith { it in granted }
-            val allGranted = resultMap.values.all { it }
-            val result = JSObject().apply {
-                put("granted", allGranted)
-                put("permissions", resultMap)
-                put("invalidRecords", invalidRecords.toList())
-            }
-            permissionCall?.resolve(result)
+
+            Log.d("AndroidHealthConnect", "Permissions granted: $resultMap")
+
+            getGrantedPermissions(permissionCall!!)
+
             permissionCall = null
             requestedPermissions = emptySet()
             invalidRecords = emptySet()
@@ -73,10 +70,17 @@ class AndroidHealthConnectPlugin : Plugin() {
         requestedPermissions = result.validPermissions
         invalidRecords = result.invalidRecords
 
+        // If there are any invalid records, reject the call.
+        if (invalidRecords.isNotEmpty()) {
+            call.reject("Invalid records specified: ${invalidRecords.joinToString()}")
+            return
+        }
+
         if (requestedPermissions.isEmpty()) {
             call.reject("No valid permissions specified. Invalid records: ${invalidRecords.joinToString()}")
             return
         }
+        
         permissionCall = call
         permissionLauncher.launch(requestedPermissions)
     }
@@ -89,6 +93,25 @@ class AndroidHealthConnectPlugin : Plugin() {
                 client.permissionController.revokeAllPermissions()
                 withContext(Dispatchers.Main) {
                     call.resolve()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    call.reject(e.message)
+                }
+            }
+        }
+    }
+
+    /**
+     * Retrieves the granted permissions and returns them to the JavaScript side.
+     */
+    @PluginMethod
+    fun getGrantedPermissions(call: PluginCall) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = implementation.getGrantedPermissions(context)
+                withContext(Dispatchers.Main) {
+                    call.resolve(result)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

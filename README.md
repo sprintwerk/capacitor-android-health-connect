@@ -1,11 +1,15 @@
 # @sprintwerk/capacitor-android-health-connect
 
-Capacitor plugin to interact with Android Health Connect
+Capacitor plugin to interact with Android Health Connect.
+
+## ❗️Alpha - under active development❗️
+
+Please keep in mind that this plugin is under active development and by far not everything Android Health Connect has to offer has been implemented yet. Currently only Steps, Weight and ActivitySession records can be read. More records and features to come soon!
 
 ## Install
 
 ```bash
-npm install @sprintwerk/capacitor-android-health-connect
+npm install @sprintwerk/capacitor-android-health-connect@alpha
 npx cap sync
 ```
 
@@ -59,6 +63,7 @@ You also need to add permissions for the records you want to read and/or write t
 
 * [`checkAvailability()`](#checkavailability)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`getGrantedPermissions()`](#getgrantedpermissions)
 * [`revokePermissions()`](#revokepermissions)
 * [`readRecords(...)`](#readrecords)
 * [Interfaces](#interfaces)
@@ -83,12 +88,25 @@ checkAvailability() => Promise<{ availability: HealthConnectAvailability; }>
 ### requestPermissions(...)
 
 ```typescript
-requestPermissions(options: { read: RecordType[]; write: RecordType[]; }) => Promise<void>
+requestPermissions(options: { read: RecordType[]; write: RecordType[]; }) => Promise<PermissionsResponse>
 ```
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code>{ read: RecordType[]; write: RecordType[]; }</code> |
+
+**Returns:** <code>Promise&lt;<a href="#permissionsresponse">PermissionsResponse</a>&gt;</code>
+
+--------------------
+
+
+### getGrantedPermissions()
+
+```typescript
+getGrantedPermissions() => Promise<PermissionsResponse>
+```
+
+**Returns:** <code>Promise&lt;<a href="#permissionsresponse">PermissionsResponse</a>&gt;</code>
 
 --------------------
 
@@ -118,6 +136,14 @@ readRecords(options: { start: string; end: string; type: RecordType; pageSize?: 
 
 
 ### Interfaces
+
+
+#### PermissionsResponse
+
+| Prop        | Type                      |
+| ----------- | ------------------------- |
+| **`read`**  | <code>RecordType[]</code> |
+| **`write`** | <code>RecordType[]</code> |
 
 
 #### ReadRecordsResponse
