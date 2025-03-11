@@ -26,6 +26,7 @@ fun convertRecordToJson(record: Record): Any {
             obj.put("endTime", record.endTime.toString())
             obj.put("endZoneOffset", record.endZoneOffset?.toString() ?: "")
             obj.put("exerciseType", convertExerciseType(record.exerciseType))
+            obj.put("exerciseTypeId", record.exerciseType)
             obj.put("title", record.title ?: "")
             obj.put("notes", record.notes ?: "")
             obj.put("metadata", convertMetadataToJson(record.metadata))
