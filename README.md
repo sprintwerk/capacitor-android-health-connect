@@ -164,7 +164,7 @@ readRecords(options: { start: string; end: string; type: RecordType; pageSize?: 
 
 #### RecordType
 
-<code>'Steps' | 'Weight' | 'ActivitySession'</code>
+<code>'Steps' | 'Weight' | 'ActivitySession' | 'SleepSession' | 'RestingHeartRate'</code>
 
 </docgen-api>
 
