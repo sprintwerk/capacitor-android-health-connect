@@ -1,4 +1,4 @@
-import { AndroidHealthConnect } from '@sprintwerk/capacitor-android-health-connect';
+import { AndroidHealthConnect } from '@devmaxime/capacitor-android-health-connect';
 
 window.requestPermissions = () => {
     AndroidHealthConnect.requestPermissions({ read: ['Steps', 'ActivitySession', 'Weight', 'SleepSession', 'RestingHeartRate'], write: ['Steps', 'Weight'] }).then((result) => {
