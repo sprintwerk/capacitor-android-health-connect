@@ -1,5 +1,5 @@
 {
-  "name": "@devmaxime/capacitor-android-health-connect",
+  "name": "@sprintwerk/capacitor-android-health-connect",
   "version": "1.0.0-alpha.4",
   "description": "Capacitor plugin to interact with Android Health Connect - Fork with Sleep and RestingHeartRate support",
   "main": "dist/plugin.cjs.js",
@@ -15,10 +15,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devmaxime/capacitor-android-health-connect.git"
+    "url": "git+https://github.com/sprintwerk/capacitor-android-health-connect.git"
   },
   "bugs": {
-    "url": "https://github.com/devmaxime/capacitor-android-health-connect/issues"
+    "url": "https://github.com/sprintwerk/capacitor-android-health-connect/issues"
   },
   "keywords": [
     "capacitor",
