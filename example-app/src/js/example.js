@@ -1,7 +1,7 @@
 import { AndroidHealthConnect } from '@sprintwerk/capacitor-android-health-connect';
 
 window.requestPermissions = () => {
-    AndroidHealthConnect.requestPermissions({ read: ['Steps', 'ActivitySession', 'Weight'], write: ['Steps', 'Weight'] }).then((result) => {
+    AndroidHealthConnect.requestPermissions({ read: ['Steps', 'ActivitySession', 'Weight', 'SleepSession', 'RestingHeartRate'], write: ['Steps', 'Weight'] }).then((result) => {
         console.log('Permissions', result);
     }).catch((error) => {
         console.error('Error', error);
@@ -55,6 +55,22 @@ window.testGetSteps = (pageToken) => {
         if (result.nextPageToken) {
             testGetSteps(result.nextPageToken);
         }
+    }).catch((error) => {
+        console.error('Error', error);
+    });
+}
+
+window.testGetSleep = () => {
+    AndroidHealthConnect.readRecords({ start: '2025-02-25T00:01:00Z', end: '2025-02-25T22:01:00Z', type: 'SleepSession' }).then((result) => {
+        console.log('Sleep Sessions', result);
+    }).catch((error) => {
+        console.error('Error', error);
+    });
+}
+
+window.testGetRestingHeartRate = () => {
+    AndroidHealthConnect.readRecords({ start: '2025-02-25T00:01:00Z', end: '2025-02-25T22:01:00Z', type: 'RestingHeartRate' }).then((result) => {
+        console.log('Resting Heart Rate', result);
     }).catch((error) => {
         console.error('Error', error);
     });

@@ -1,7 +1,7 @@
 {
   "name": "@sprintwerk/capacitor-android-health-connect",
-  "version": "1.0.0-alpha.3",
-  "description": "Capacitor plugin to interact with Android Health Connect",
+  "version": "1.0.0-alpha.4",
+  "description": "Capacitor plugin to interact with Android Health Connect - Fork with Sleep and RestingHeartRate support",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

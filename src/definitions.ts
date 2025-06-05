@@ -18,7 +18,7 @@ export interface AndroidHealthConnectPlugin {
 
 export type HealthConnectAvailability = 'Available' | 'NotSupported' | 'NotInstalled';
 
-export type RecordType = 'Steps' | 'Weight' | 'ActivitySession';
+export type RecordType = 'Steps' | 'Weight' | 'ActivitySession' | 'SleepSession' | 'RestingHeartRate';
 
 export interface ReadRecordsResponse {
   records: any[];

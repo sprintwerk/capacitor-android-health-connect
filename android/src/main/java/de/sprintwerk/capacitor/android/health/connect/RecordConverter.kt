@@ -6,6 +6,8 @@ import androidx.health.connect.client.records.Record
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import androidx.health.connect.client.records.StepsRecord
+import androidx.health.connect.client.records.SleepSessionRecord
+import androidx.health.connect.client.records.RestingHeartRateRecord
 import androidx.health.connect.client.records.ExerciseSegment
 import androidx.health.connect.client.records.ExerciseLap
 import androidx.health.connect.client.records.ExerciseRoute
@@ -61,6 +63,36 @@ fun convertRecordToJson(record: Record): Any {
             obj.put("zoneOffset", record.zoneOffset?.toString() ?: "")
             obj.put("value", record.weight.inKilograms)
             obj.put("unit", "kg")
+            obj.put("metadata", convertMetadataToJson(record.metadata))
+            obj
+        }
+        is SleepSessionRecord -> {
+            val obj = JSObject()
+            obj.put("startTime", record.startTime.toString())
+            obj.put("startZoneOffset", record.startZoneOffset?.toString() ?: "")
+            obj.put("endTime", record.endTime.toString())
+            obj.put("endZoneOffset", record.endZoneOffset?.toString() ?: "")
+            obj.put("title", record.title ?: "")
+            obj.put("notes", record.notes ?: "")
+            obj.put("metadata", convertMetadataToJson(record.metadata))
+            
+            // Convert sleep stages into a JSArray
+            val stagesArray = JSArray()
+            record.stages.forEach { stage ->
+                val stageObj = JSObject()
+                stageObj.put("startTime", stage.startTime.toString())
+                stageObj.put("endTime", stage.endTime.toString())
+                stageObj.put("stage", convertSleepStageType(stage.stage))
+                stagesArray.put(stageObj)
+            }
+            obj.put("stages", stagesArray)
+            obj
+        }
+        is RestingHeartRateRecord -> {
+            val obj = JSObject()
+            obj.put("time", record.time.toString())
+            obj.put("zoneOffset", record.zoneOffset?.toString() ?: "")
+            obj.put("beatsPerMinute", record.beatsPerMinute)
             obj.put("metadata", convertMetadataToJson(record.metadata))
             obj
         }
@@ -326,6 +358,22 @@ fun convertRecordingMethodToString(method: Int): String {
         2 -> "RECORDING_METHOD_AUTOMATICALLY_RECORDED"
         3 -> "RECORDING_METHOD_MANUAL_ENTRY"
         else -> "RECORDING_METHOD_UNKNOWN"
+    }
+}
+
+/**
+ * Converts a sleep stage type integer to a descriptive string.
+ */
+fun convertSleepStageType(stage: Int): String {
+    return when (stage) {
+        1 -> "SLEEP_STAGE_AWAKE"
+        2 -> "SLEEP_STAGE_SLEEPING"
+        3 -> "SLEEP_STAGE_OUT_OF_BED"
+        4 -> "SLEEP_STAGE_LIGHT"
+        5 -> "SLEEP_STAGE_DEEP"
+        6 -> "SLEEP_STAGE_REM"
+        0 -> "SLEEP_STAGE_UNKNOWN"
+        else -> "SLEEP_STAGE_UNKNOWN"
     }
 }
 
