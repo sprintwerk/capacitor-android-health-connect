@@ -1,0 +1,185 @@
+{
+  "api": {
+    "name": "AndroidHealthConnectPlugin",
+    "slug": "androidhealthconnectplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "checkAvailability",
+        "signature": "() => Promise<{ availability: HealthConnectAvailability; }>",
+        "parameters": [],
+        "returns": "Promise<{ availability: HealthConnectAvailability; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "HealthConnectAvailability"
+        ],
+        "slug": "checkavailability"
+      },
+      {
+        "name": "requestPermissions",
+        "signature": "(options: { read: RecordType[]; write: RecordType[]; }) => Promise<PermissionsResponse>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ read: RecordType[]; write: RecordType[]; }"
+          }
+        ],
+        "returns": "Promise<PermissionsResponse>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PermissionsResponse",
+          "RecordType"
+        ],
+        "slug": "requestpermissions"
+      },
+      {
+        "name": "getGrantedPermissions",
+        "signature": "() => Promise<PermissionsResponse>",
+        "parameters": [],
+        "returns": "Promise<PermissionsResponse>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PermissionsResponse"
+        ],
+        "slug": "getgrantedpermissions"
+      },
+      {
+        "name": "revokePermissions",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "revokepermissions"
+      },
+      {
+        "name": "readRecords",
+        "signature": "(options: { start: string; end: string; type: RecordType; pageSize?: number; pageToken?: string; }) => Promise<ReadRecordsResponse>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ start: string; end: string; type: RecordType; pageSize?: number | undefined; pageToken?: string | undefined; }"
+          }
+        ],
+        "returns": "Promise<ReadRecordsResponse>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "ReadRecordsResponse",
+          "RecordType"
+        ],
+        "slug": "readrecords"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "PermissionsResponse",
+      "slug": "permissionsresponse",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "read",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "RecordType"
+          ],
+          "type": "RecordType[]"
+        },
+        {
+          "name": "write",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "RecordType"
+          ],
+          "type": "RecordType[]"
+        }
+      ]
+    },
+    {
+      "name": "ReadRecordsResponse",
+      "slug": "readrecordsresponse",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "records",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "any[]"
+        },
+        {
+          "name": "nextPageToken",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [
+    {
+      "name": "HealthConnectAvailability",
+      "slug": "healthconnectavailability",
+      "docs": "",
+      "types": [
+        {
+          "text": "'Available'",
+          "complexTypes": []
+        },
+        {
+          "text": "'NotSupported'",
+          "complexTypes": []
+        },
+        {
+          "text": "'NotInstalled'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "RecordType",
+      "slug": "recordtype",
+      "docs": "",
+      "types": [
+        {
+          "text": "'Steps'",
+          "complexTypes": []
+        },
+        {
+          "text": "'Weight'",
+          "complexTypes": []
+        },
+        {
+          "text": "'ActivitySession'",
+          "complexTypes": []
+        },
+        {
+          "text": "'SleepSession'",
+          "complexTypes": []
+        },
+        {
+          "text": "'RestingHeartRate'",
+          "complexTypes": []
+        }
+      ]
+    }
+  ],
+  "pluginConfigs": []
+}
